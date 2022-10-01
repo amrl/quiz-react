@@ -4,7 +4,7 @@ import Quiz from "./components/Quiz";
 import './App.css';
 
 function App() {
-    const [hasStarted, setHasStarted] = React.useState(true);
+    const [hasStarted, setHasStarted] = React.useState(false);
     
     function handleStartClick() {
         setHasStarted(true);

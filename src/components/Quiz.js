@@ -8,10 +8,10 @@ function Quiz() {
     const [hasEnded, setHasEnded] = React.useState(false);
     const [replay, setReplay] = React.useState(false);
 
-    React.useEffect(() => {    
+    React.useEffect(() => {
         function refine(data) {
             return data.results.map(qn => {
-                // randomly insert correct answer among incorrect options
+                // insert correct answer randomly among incorrect options
                 const options = qn.incorrect_answers;
                 const randInsertionIdx = Math.floor(Math.random() * (options.length + 1));
                 options.splice(randInsertionIdx, 0, qn.correct_answer);
@@ -29,7 +29,7 @@ function Quiz() {
         fetch("https://opentdb.com/api.php?amount=5&type=multiple")
             .then(res => res.json())
             .then(data => refine(data))
-            .then(qns => setQuiz(qns));
+            .then(qns => setQuiz(qns))
     }, [replay]);
 
     function getQuizScore() {
@@ -50,7 +50,7 @@ function Quiz() {
     }
 
     function handleCheckAnsClick() {
-        if (quiz.every(qn => qn.selectedOption !== -1)) {
+        if (quiz.every(qn => qn.selectedOptionIdx !== -1)) {
             setHasEnded(true);
         } else {
             alert("Some questions are unanswered!");
@@ -73,7 +73,8 @@ function Quiz() {
             question={qn.question}
             options={qn.options}
             selectOption={selectedOptionIdx => setSelectedOption(qn.key, selectedOptionIdx)}
-            selectedOption={qn.selectedOption}
+            correctOptionIdx={qn.correctOptionIdx}
+            selectedOptionIdx={qn.selectedOptionIdx}
             hasEnded={hasEnded}
         />
     ));
@@ -98,7 +99,7 @@ function Quiz() {
                 <div className="quiz-play">
                     {quiz.length > 0 &&
                         <button
-                            className="quiz--check-btn"
+                            className="quiz-play--check-btn"
                             onClick={handleCheckAnsClick}
                         >
                             Check answers
