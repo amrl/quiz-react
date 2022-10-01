@@ -8,7 +8,8 @@ function Start({handleStartClick}) {
             <button
                 className="start--btn"
                 onClick={handleStartClick}
-            >Start quiz
+            >
+                Start quiz
             </button>
         </div>
     );

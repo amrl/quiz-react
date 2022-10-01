@@ -4,7 +4,7 @@ import Quiz from "./components/Quiz";
 import './App.css';
 
 function App() {
-    const [hasStarted, setHasStarted] = React.useState(false);
+    const [hasStarted, setHasStarted] = React.useState(true);
     
     function handleStartClick() {
         setHasStarted(true);
@@ -12,15 +12,15 @@ function App() {
     
     return (
         <div className="App">
-        {hasStarted ?
-            <Quiz />
+            {hasStarted ?
+                <Quiz />
             :
-            <Start
-                handleStartClick={handleStartClick}
-            />
-        }
+                <Start
+                    handleStartClick={handleStartClick}
+                />
+            }
         </div>
         );
     }
     
-    export default App;
+export default App;
