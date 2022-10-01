@@ -1,4 +1,5 @@
-import React from "react"
+import React from "react";
+import PropTypes from "prop-types";
 
 function Start(props) {
     return (
@@ -13,6 +14,10 @@ function Start(props) {
             </button>
         </div>
     );
+}
+
+Start.propTypes = {
+    handleStartClick: PropTypes.func
 }
 
 export default Start;

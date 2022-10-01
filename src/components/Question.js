@@ -1,5 +1,6 @@
 import React from "react";
 import {decode} from "html-entities";
+import PropTypes from "prop-types";
 
 function Question(props) {    
     function getBtnClass(optionIdx) {
@@ -39,6 +40,15 @@ function Question(props) {
             <hr />
         </div>
     );
+}
+
+Question.propTypes = {
+    selectedOptionIdx: PropTypes.number,
+    correctOptionIdx: PropTypes.number,
+    hasEnded: PropTypes.bool,
+    options: PropTypes.arrayOf(PropTypes.string),
+    selectOption: PropTypes.func,
+    question: PropTypes.string
 }
 
 export default Question;
