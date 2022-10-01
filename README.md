@@ -14,7 +14,7 @@ Bootstrapped with [Create React App](https://github.com/facebook/create-react-ap
 
 ## Run
 ```
-git clone git@github.com:amrl/quiz-react.git
+git clone https://github.com/amrl/quiz-react.git
 cd quiz-react
 npm install
 npm start
