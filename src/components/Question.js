@@ -1,9 +1,9 @@
 import React from "react"
 
-function Question() {
+function Question(props) {
     return (
         <div className="question">
-
+            <h2 className="question--title">{props.question}</h2>
         </div>
     )
 }
