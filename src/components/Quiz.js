@@ -8,12 +8,7 @@ function Quiz() {
     const [hasEnded, setHasEnded] = React.useState(false);
     const [replay, setReplay] = React.useState(false);
 
-    React.useEffect(() => {
-        fetch("https://opentdb.com/api.php?amount=5&type=multiple")
-            .then(res => res.json())
-            .then(data => refine(data))
-            .then(qns => setQuiz(qns));
-    
+    React.useEffect(() => {    
         function refine(data) {
             return data.results.map(qn => {
                 // randomly insert correct answer among incorrect options
@@ -30,17 +25,12 @@ function Quiz() {
                 };
             });
         }
-    }, [replay]);
 
-    function setSelectedOption(qnKey, selectedOptionIdx) {
-        setQuiz(qns => qns.map(qn => ({
-                ...qn,
-                selectedOptionIdx: qn.key === qnKey ?
-                    selectedOptionIdx :
-                    qn.selectedOptionIdx
-            }
-        )));
-    }
+        fetch("https://opentdb.com/api.php?amount=5&type=multiple")
+            .then(res => res.json())
+            .then(data => refine(data))
+            .then(qns => setQuiz(qns));
+    }, [replay]);
 
     function getQuizScore() {
         let score = 0;
@@ -52,17 +42,6 @@ function Quiz() {
         
         return score;
     }
-
-    const questionElements = quiz.map(qn => (
-        <Question
-            key={qn.key}
-            question={qn.question}
-            options={qn.options}
-            selectOption={selectedOptionIdx => setSelectedOption(qn.key, selectedOptionIdx)}
-            selectedOption={qn.selectedOption}
-            hasEnded={hasEnded}
-        />
-    ));
     
     function handleReplayClick() {
         setQuiz([]);
@@ -78,6 +57,27 @@ function Quiz() {
         }
     }
 
+    function setSelectedOption(qnKey, selectedOptionIdx) {
+        setQuiz(qns => qns.map(qn => ({
+                ...qn,
+                selectedOptionIdx: qn.key === qnKey ?
+                    selectedOptionIdx :
+                    qn.selectedOptionIdx
+            }
+        )));
+    }
+
+    const questionElements = quiz.map(qn => (
+        <Question
+            key={qn.key}
+            question={qn.question}
+            options={qn.options}
+            selectOption={selectedOptionIdx => setSelectedOption(qn.key, selectedOptionIdx)}
+            selectedOption={qn.selectedOption}
+            hasEnded={hasEnded}
+        />
+    ));
+
     return (
         <div className="quiz">
             {questionElements}
@@ -85,11 +85,12 @@ function Quiz() {
             {hasEnded ?
                 <div className="quiz-end">
                     <h2 className="quiz-end--score">
-                        You had {getQuizScore()}/{quiz.length} correct answers
+                        You had {getQuizScore()} / {quiz.length} correct answers!
                     </h2>
                     <button
                         className="quiz-end--replay-btn"
-                        onClick={handleReplayClick}>
+                        onClick={handleReplayClick}
+                    >
                         Play again
                     </button>
                 </div>
@@ -98,7 +99,8 @@ function Quiz() {
                     {quiz.length > 0 &&
                         <button
                             className="quiz--check-btn"
-                            onClick={handleCheckAnsClick}>
+                            onClick={handleCheckAnsClick}
+                        >
                             Check answers
                         </button>
                     }
@@ -108,4 +110,4 @@ function Quiz() {
     );
 }
 
-export default Quiz
+export default Quiz;
