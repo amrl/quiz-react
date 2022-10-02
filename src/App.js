@@ -17,7 +17,7 @@ function App() {
                 : <Start handleStartClick={handleStartClick} />
             }
         </div>
-        );
-    }
+    );
+}
     
 export default App;
