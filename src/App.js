@@ -12,12 +12,9 @@ function App() {
     
     return (
         <div className="App">
-            {hasStarted ?
-                <Quiz />
-            :
-                <Start
-                    handleStartClick={handleStartClick}
-                />
+            {hasStarted
+                ? <Quiz />
+                : <Start handleStartClick={handleStartClick} />
             }
         </div>
         );
