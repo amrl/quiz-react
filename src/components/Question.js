@@ -3,32 +3,31 @@ import {decode} from "html-entities";
 import PropTypes from "prop-types";
 
 function Question(props) {    
-    function getBtnClass(optionIdx) {
+    function getOptionBtnClass(optionIdx) {
         const {selectedOptionIdx, correctOptionIdx, hasEnded} = props;
 
         if (hasEnded) {
             if (optionIdx === correctOptionIdx) {
-                return "correct-option"
+                return "correct-option";
             } else if (optionIdx === selectedOptionIdx) {
-                return "wrong-selected-option"
+                return "wrong-selected-option";
             } else {
-                return "remaining-option"
-            }
-        } else {
-            if (optionIdx === selectedOptionIdx) {
-                return "selected-option"
-            } else {
-                return ""
+                return "remaining-option";
             }
         }
+        
+        if (optionIdx === selectedOptionIdx) {
+            return "selected-option";
+        }
+
+        return "";
     }
 
     const optionBtns = props.options.map((option, optionIdx) => (
         <button
             key={optionIdx}
-            className={`question--option-btn ${getBtnClass(optionIdx)}`}
-            onClick={() => props.selectOption(optionIdx)}
-        >
+            className={`question--option-btn ${getOptionBtnClass(optionIdx)}`}
+            onClick={() => props.selectOption(optionIdx)}>
             {decode(option)}
         </button>
     ));
@@ -49,6 +48,6 @@ Question.propTypes = {
     options: PropTypes.arrayOf(PropTypes.string),
     selectOption: PropTypes.func,
     question: PropTypes.string
-}
+};
 
 export default Question;

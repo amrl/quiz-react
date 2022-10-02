@@ -8,8 +8,7 @@ function Start(props) {
             <h2 className="start--subtitle">A decent quiz game</h2>
             <button
                 className="start--btn"
-                onClick={props.handleStartClick}
-            >
+                onClick={props.handleStartClick}>
                 Start quiz
             </button>
         </div>
@@ -18,6 +17,6 @@ function Start(props) {
 
 Start.propTypes = {
     handleStartClick: PropTypes.func
-}
+};
 
 export default Start;
