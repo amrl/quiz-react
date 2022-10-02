@@ -9,28 +9,28 @@ function Quiz() {
     const [replay, setReplay] = React.useState(false);
 
     React.useEffect(() => {
-        function refine(data) {
-            return data.results.map(qn => {
-                // insert correct answer randomly among incorrect options
-                const options = qn.incorrect_answers;
-                const randInsertionIdx = Math.floor(Math.random() * (options.length + 1));
-                options.splice(randInsertionIdx, 0, qn.correct_answer);
-                
-                return {
-                    key: nanoid(),
-                    question: decode(qn.question),
-                    options: options,
-                    correctOptionIdx: randInsertionIdx,
-                    selectedOptionIdx: -1
-                };
-            });
-        }
-
         fetch("https://opentdb.com/api.php?amount=5&type=multiple")
-            .then(res => res.json())
-            .then(data => refine(data))
-            .then(qns => setQuiz(qns))
+            .then(resp => resp.json())
+            .then(data => setup(data))
+            .then(qns => setQuiz(qns));
     }, [replay]);
+
+    function setup(apiData) {
+        return apiData.results.map(qn => {
+            // insert correct answer randomly among incorrect options
+            const options = qn.incorrect_answers;
+            const randInsertionIdx = Math.floor(Math.random() * (options.length + 1));
+            options.splice(randInsertionIdx, 0, qn.correct_answer);
+            
+            return {
+                key: nanoid(),
+                question: decode(qn.question),
+                options: options,
+                correctOptionIdx: randInsertionIdx,
+                selectedOptionIdx: -1
+            };
+        });
+    }
 
     function getQuizScore() {
         let score = 0;
@@ -50,19 +50,21 @@ function Quiz() {
     }
 
     function handleCheckAnsClick() {
-        if (quiz.every(qn => qn.selectedOptionIdx !== -1)) {
-            setHasEnded(true);
-        } else {
+        if (quiz.some(qn => qn.selectedOptionIdx === -1)) {
             alert("Some questions are unanswered!");
+            return;
         }
+
+        setHasEnded(true);
     }
 
-    function setSelectedOption(qnKey, selectedOptionIdx) {
-        setQuiz(qns => qns.map(qn => ({
+    function setSelectedOption(qnKey, optionIdx) {
+        setQuiz(qns => qns.map(qn => (
+            {
                 ...qn,
-                selectedOptionIdx: qn.key === qnKey ?
-                    selectedOptionIdx :
-                    qn.selectedOptionIdx
+                selectedOptionIdx: qn.key === qnKey
+                    ? optionIdx
+                    : qn.selectedOptionIdx
             }
         )));
     }
@@ -70,41 +72,39 @@ function Quiz() {
     const questionElements = quiz.map(qn => (
         <Question
             key={qn.key}
-            question={qn.question}
-            options={qn.options}
-            selectOption={selectedOptionIdx => setSelectedOption(qn.key, selectedOptionIdx)}
-            correctOptionIdx={qn.correctOptionIdx}
-            selectedOptionIdx={qn.selectedOptionIdx}
+            {...qn}
+            selectOption={optionIdx => setSelectedOption(qn.key, optionIdx)}
             hasEnded={hasEnded}
         />
     ));
 
     return (
         <div className="quiz">
-            {questionElements}
+            {quiz.length > 0
+                ? questionElements
+                : <h1 className="quiz--load-msg">Loading quiz...</h1>
+            }
             
-            {hasEnded ?
+            {hasEnded &&
                 <div className="quiz-end">
                     <h2 className="quiz-end--score">
-                        You had {getQuizScore()} / {quiz.length} correct answers!
+                        You have {getQuizScore()} / {quiz.length} correct answers!
                     </h2>
                     <button
                         className="quiz-end--replay-btn"
-                        onClick={handleReplayClick}
-                    >
+                        onClick={handleReplayClick}>
                         Play again
                     </button>
                 </div>
-            :
+            }
+
+            {!hasEnded && quiz.length > 0 &&
                 <div className="quiz-play">
-                    {quiz.length > 0 &&
-                        <button
-                            className="quiz-play--check-btn"
-                            onClick={handleCheckAnsClick}
-                        >
-                            Check answers
-                        </button>
-                    }
+                    <button
+                        className="quiz-play--check-btn"
+                        onClick={handleCheckAnsClick}>
+                        Check answers
+                    </button>
                 </div>
             }
         </div>
