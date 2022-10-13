@@ -1,16 +1,17 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 
-function Start(props) {
+function Start() {
     return (
         <div className="start">
             <h1 className="start--title">QuickQuiz</h1>
             <h2 className="start--subtitle">A decent quiz game</h2>
-            <button
-                className="start--btn"
-                onClick={props.handleStartClick}>
-                Start quiz
-            </button>
+            <Link to="/quiz-react/play">
+                <button className="start--btn">
+                    Start quiz
+                </button>
+            </Link>
         </div>
     );
 }
