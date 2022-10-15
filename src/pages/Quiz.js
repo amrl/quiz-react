@@ -1,6 +1,6 @@
 import React from "react";
-import Question from "./Question";
-import Controls from "./Controls";
+import Question from "../components/Question";
+import Controls from "../components/Controls";
 import {decode} from "html-entities";
 import {nanoid} from "nanoid";
 
