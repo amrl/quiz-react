@@ -1,19 +1,29 @@
 import React from "react";
 import Question from "./Question";
+import Controls from "./Controls";
 import {decode} from "html-entities";
 import {nanoid} from "nanoid";
 
 function Quiz() {
     const [quiz, setQuiz] = React.useState([]);
     const [hasEnded, setHasEnded] = React.useState(false);
-    const [replay, setReplay] = React.useState(false);
+    const [score, setScore] = React.useState(
+        JSON.parse(localStorage.getItem("score"))
+        || {currCorrect: 0, totalCorrect: 0, totalAnswered: 0}
+    );
 
     React.useEffect(() => {
-        fetch("https://opentdb.com/api.php?amount=5&type=multiple")
-            .then(resp => resp.json())
-            .then(data => setup(data))
-            .then(qns => setQuiz(qns));
-    }, [replay]);
+        if (!hasEnded) {
+            fetch("https://opentdb.com/api.php?amount=5&type=multiple")
+                .then(resp => resp.json())
+                .then(data => setup(data))
+                .then(qns => setQuiz(qns));
+        }
+    }, [hasEnded]);
+
+    React.useEffect(() => {
+        localStorage.setItem("score", JSON.stringify(score));
+    }, [score]);
 
     function setup(apiData) {
         return apiData.results.map(qn => {
@@ -32,7 +42,7 @@ function Quiz() {
         });
     }
 
-    function getQuizScore() {
+    function getCurrCorrectScore() {
         let score = 0;
         for (const qn of quiz) {
             if (qn.selectedOptionIdx === qn.correctOptionIdx) {
@@ -46,7 +56,12 @@ function Quiz() {
     function handleReplayClick() {
         setQuiz([]);
         setHasEnded(false);
-        setReplay(prevReplay => !prevReplay);
+    }
+
+    function handleResetClick() {
+        setQuiz([]);
+        setScore({currCorrect: 0, totalCorrect: 0, totalAnswered: 0});
+        setHasEnded(false);
     }
 
     function handleCheckAnsClick() {
@@ -54,7 +69,13 @@ function Quiz() {
             alert("Some questions are unanswered!");
             return;
         }
-
+        
+        const currCorrectScore = getCurrCorrectScore();
+        setScore(prevScore => ({
+            currCorrect: currCorrectScore,
+            totalCorrect: prevScore.totalCorrect + currCorrectScore,
+            totalAnswered: prevScore.totalAnswered + quiz.length
+        }));
         setHasEnded(true);
     }
 
@@ -84,29 +105,15 @@ function Quiz() {
                 ? questionElements
                 : <h1 className="quiz--load-msg">Loading quiz...</h1>
             }
-            
-            {hasEnded &&
-                <div className="quiz-end">
-                    <h2 className="quiz-end--score">
-                        You have {getQuizScore()} / {quiz.length} correct answers!
-                    </h2>
-                    <button
-                        className="quiz-end--replay-btn"
-                        onClick={handleReplayClick}>
-                        Play again
-                    </button>
-                </div>
-            }
 
-            {!hasEnded && quiz.length > 0 &&
-                <div className="quiz-play">
-                    <button
-                        className="quiz-play--check-btn"
-                        onClick={handleCheckAnsClick}>
-                        Check answers
-                    </button>
-                </div>
-            }
+            <Controls
+                hasEnded={hasEnded}
+                score={score}
+                quiz={quiz}
+                handleReplayClick={handleReplayClick}
+                handleResetClick={handleResetClick}
+                handleCheckAnsClick={handleCheckAnsClick}
+            />
         </div>
     );
 }
