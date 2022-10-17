@@ -12,7 +12,9 @@ body {
     justify-content: center;
     align-items: center;
 
-    background: #D5E8E8;
+    height: 100vh;
+    background-image: linear-gradient(#CFE3E3, #FFFFFF);
+    /* background: #D5E8E8; */
 }
 
 .start {
