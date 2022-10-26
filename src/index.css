@@ -58,6 +58,8 @@ body {
     line-height: 19px;
 
     color: #F5F7FB;
+
+    cursor: pointer;
 }
 
 .quiz {
