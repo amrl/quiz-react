@@ -1,3 +1,7 @@
+html {
+    min-height: 100%;
+}
+
 body {
     max-width: 120ch;
     margin: auto;
@@ -11,10 +15,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    height: 100vh;
+    
+    background-repeat: no-repeat;
     background-image: linear-gradient(#CFE3E3, #FFFFFF);
-    /* background: #D5E8E8; */
 }
 
 .start {
@@ -135,9 +138,17 @@ body {
     cursor: pointer;
 }
 
-.selected-option {
+.question--option-btn:hover,
+.question--option-btn:focus {
+    background-color: #e0e0e0;
+}
+
+.selected-option,
+.selected-option:hover,
+.selected-option:focus {
     background-color: #B4D6D6;
     border: 1px solid transparent;
+    cursor: default;
 }
 
 .correct-option {
