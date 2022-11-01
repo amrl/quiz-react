@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-function Start() {
+function Home() {
     return (
         <div className="start">
             <h1 className="start--title">QuickQuiz</h1>
@@ -15,4 +15,4 @@ function Start() {
     );
 }
 
-export default Start;
+export default Home;
