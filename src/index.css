@@ -56,13 +56,19 @@ body {
     border: none;
     
     font-family: 'Inter';
-    font-weight: 500;
+    font-weight: 600;
     font-size: 16px;
     line-height: 19px;
 
     color: #F5F7FB;
 
     cursor: pointer;
+
+    transition: background 250ms;
+}
+
+.start--btn:hover {
+    background: #37489E;
 }
 
 .quiz {
