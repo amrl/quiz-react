@@ -1,6 +1,6 @@
 # Quiz App using React
 
-### 🏃 [Live Demo](https://amrl.github.io/quiz-react/)
+### [Live Demo](https://amrl.github.io/quiz-react/) 🏃
 
 ## 🗼 Overview
 
