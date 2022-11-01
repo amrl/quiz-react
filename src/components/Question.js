@@ -36,7 +36,6 @@ function Question(props) {
         <div className="question">
             <h2 className="question--title">{props.question}</h2>
             {optionBtns}
-            <hr />
         </div>
     );
 }
